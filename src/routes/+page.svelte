@@ -30,6 +30,7 @@
           image_id: item.image_id,
           artist_display: item.artist_display,
           place_of_origin: item.place_of_origin,
+          alt_text: item.thumbnail.alt_text
         });
       });
       artist = JSON.stringify(artistArray);
@@ -54,6 +55,7 @@
       `https://api.artic.edu/api/v1/artworks/${artistId}`
     );
     const data = await res.json();
+    console.log(data)
 
     if (res.ok) {
       return data;
@@ -127,8 +129,12 @@
     </form>
     
       <div class="details">
-        {#each artistArray as { id, api_link, title, artist_id, artist_title, image_id, artist_display, place_of_origin }, i}
-          <ArtistCard
+        {#each artistArray as { id, api_link, title, artist_id, artist_title, image_id, artist_display, place_of_origin, 
+          alt_text, credit_line, date_display, category_titles, classification_titles, medium_display }, index}
+          
+        
+        <ArtistCard
+            index = {index}
             id = {id}
             api_link = {api_link}
             title = {title}
@@ -137,6 +143,12 @@
             image_id = {image_id}
             artist_display = {artist_display}
             place_of_origin = {place_of_origin}
+            alt_text = {alt_text}
+            credit_line = {credit_line}
+            date_display = {date_display}
+            category_titles = {category_titles}
+            classification_titles = {classification_titles}
+            medium_display = {medium_display}
             on:message={handleMessage}
             on:message2={handleMessage2}
             showLink = true
@@ -164,6 +176,12 @@
             image_id = {response.image_id}
             artist_display = {response.artist_display}
             place_of_origin = {response.place_of_origin}
+            alt_text = {response.alt_text}
+            credit_line = {response.credit_line}
+            date_display = {response.date_display}
+            category_titles = {response.category_titles}
+            classification_titles = {response.classification_titles}
+            medium_display = {response.medium_display}
             on:message={handleMessage}
             on:message2={handleMessage2}
             showLink = false
@@ -178,7 +196,7 @@
     <!-- ----------- ----------- Image Section ------------- -------------- -->
 
     <section class="section">
-        <input type="range" min="200" max="1000" bind:value={size} />
+        <input type="range" min="200" max="1500" bind:value={size} />
         <input class="artInput" type="text" name="artId" bind:value={artId} />
       <button on:click={handleGetArtId}> Get Art Image </button>
       <img class="artImg" src={artImg} alt="" width={size} />
